@@ -1,0 +1,11 @@
+#js-city-ul ul {
+    padding-left: 0;
+}
+#js-city-ul li{
+	list-style: none;
+	padding: 3px 25px;
+}
+#js-city-ul li:hover{
+	cursor:pointer !important;
+	background: #c9daac;
+}

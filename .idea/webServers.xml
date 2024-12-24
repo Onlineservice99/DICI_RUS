@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="d3f728e0-7ab0-4067-8d61-1bb27c20b526" name="DICI_RUS" url="https://xn--d1aia9a.xn--p1acf">
+        <fileTransfer rootFolder="/www/xn--d1aia9a.xn--p1acf" host="31.128.39.144" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

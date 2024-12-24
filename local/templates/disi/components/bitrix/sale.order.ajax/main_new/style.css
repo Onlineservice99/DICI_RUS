@@ -1,0 +1,49 @@
+.terms span{
+	font-size: 0.8em;
+}
+#soa-submit-button.disabled{
+	background: #ccc;
+	cursor: inherit;
+}
+.terms_error{
+	display: none;
+	color: red;
+	font-size: 0.8em;
+}
+.terms a{
+    font-style: italic;
+    text-decoration: underline;
+}
+.popup-window-close-icon:after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
+    width: 10px;
+    height: 10px;
+    background-image: url(data:image/svg+xml;charset=utf-8,%3Csvg width='10' height='10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.787 1L5 3.787 2.213 1 1 2.213 3.787 5 1 7.787 2.213 9 5 6.213 7.787 9 9 7.787 6.213 5 9 2.213' fill='%23999' fill-rule='evenodd'/%3E%3C/svg%3E);
+    background-repeat: no-repeat;
+    background-size: cover;
+    content: "";
+}
+.sbl-warningPopup span.btn.btn-default.btn-buy.btn-sm{
+    color: #0e870e;
+}
+.suggestions-suggestions{
+    display: block;
+}
+.suggestions-suggestion:hover{
+    cursor:pointer !important;
+    background: #c9daac !important;
+}
+.delivery_error{
+    display:none;
+    color: red;
+}
+.DPD_openTerminalSelect {
+    padding: 20px !important;
+    cursor: pointer;
+    background-color: #fc152e;
+}
