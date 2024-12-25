@@ -173,7 +173,8 @@ this.Meven = this.Meven || {};
       }, {
         key: "parseResponse",
         value: function parseResponse(json) {
-          this.createDeliveries(json.order.DELIVERY);
+            console.log(json)
+          this.createDeliveries(json.order.DELIVERY,json.deliveryId);
           this.createPayments(json.order.PAY_SYSTEM);
           this.createItems(json.order.GRID.ROWS);
           this.updatePropFields(json.order.ORDER_PROP);
@@ -181,8 +182,7 @@ this.Meven = this.Meven || {};
         }
       }, {
         key: "createDeliveries",
-        value: function createDeliveries(deliveries) {
-          console.log(deliveries);
+        value: function createDeliveries(deliveries,$setted_value) {
           var blocks = $('[data-delivery]');
           let showTabs=true;
           let stopChecking=false;
@@ -196,11 +196,19 @@ this.Meven = this.Meven || {};
               for (var key in deliveries) {
                 if(deliveryIds.indexOf(deliveries[key].ID) != -1){
                   var ch = '';
-
-                  if (deliveries[key].CHECKED === 'Y') {
-                    ch = 'checked="checked"';
-                     activeBlock=block.attr("id");
-                  }
+                    console.log(deliveries[key].ID,'$setted_value',$setted_value)
+                    if($setted_value == null){
+                        if (deliveries[key].CHECKED === 'Y') {
+                            ch = 'checked="checked"';
+                            activeBlock=block.attr("id");
+                        }
+                    }
+                    else{
+                        if (deliveries[key].ID === $setted_value) {
+                            ch = 'checked="checked"';
+                            activeBlock=block.attr("id");
+                        }
+                    }
                   
                   html += '<div class="form-block">' + '<label class="form-block__checkbox form-block__checkbox--radio">' + '<input class="js-refresh-elem" type="radio" name="DELIVERY_ID" value="' + deliveries[key].ID + '" ' + ch + '><span' + ' class="p-md">' + deliveries[key].OWN_NAME + '</span>' + '</label>';
 
@@ -217,6 +225,7 @@ this.Meven = this.Meven || {};
               }
               block.html(html);
             });
+
           $('a[href="#'+activeBlock+'"]').click();
           if(showTabs){
             $(".delivery_block").find(".delivery_tabs").addClass("d-lg-flex").show();

@@ -3894,8 +3894,9 @@ class SaleOrderAjax extends \CBitrixComponent
 		/** @var Shipment $shipment */
 		foreach ($order->getShipmentCollection() as $shipment)
 		{
-			if (!$shipment->isSystem())
-				return $shipment;
+			if (!$shipment->isSystem()){
+                return $shipment;
+            }
 		}
 
 		return null;
@@ -4747,29 +4748,94 @@ class SaleOrderAjax extends \CBitrixComponent
 		}
 
 	}
-
 	/**
 	 * Ajax action - recalculate order and send JSON answer with data/errors
 	 */
-	protected function refreshOrderAjaxAction()
-	{
-		$error = false;
-		$this->request->set($this->request->get('order'));
-		if ($this->checkSession)
-		{
-			$this->order = $this->createOrder($this->getUserId() ?? 0);
-			$this->prepareResultArray();
-			self::scaleImages($this->arResult['JS_DATA'], $this->arParams['SERVICES_IMAGES_SCALING']);
-		}
-		else
-			$error = Loc::getMessage('SESSID_ERROR');
+    protected function refreshOrderAjaxAction()
+    {
+        $error = false;
 
-		$this->showAjaxAnswer([
-			'order' => $this->arResult['JS_DATA'],
-			'locations' => $this->arResult['LOCATIONS'],
-			'error' => $error,
-		]);
-	}
+        // Установка данных из запроса
+        $orderProps = $this->request->get('order');
+        $personTypeId = $orderProps['PERSON_TYPE'] ?? null;
+        $deliveryId = $orderProps['DELIVERY_ID'] ?? null;
+        $locationId = $orderProps['ORDER_PROP_21'] ?? null;
+
+        // Проверяем сессию
+        if ($this->checkSession) {
+            // Создаем или загружаем заказ
+            $this->order = $this->createOrder($this->getUserId() ?? 0);
+
+            // Устанавливаем местоположение
+            if ($locationId) {
+                $propertyCollection = $this->order->getPropertyCollection();
+                $propertyLocation = $propertyCollection->getDeliveryLocation();
+
+                if ($propertyLocation) {
+                    $propertyLocation->setValue($locationId);
+                }
+            }
+
+            // Устанавливаем тип плательщика
+            if ($personTypeId) {
+                $this->order->setPersonTypeId($personTypeId);
+            }
+
+            // Если PERSON_TYPE = 2 (юридическое лицо), обновляем свойства заказа
+            if ($personTypeId == 2) {
+                /*$propertyCollection = $this->order->getPropertyCollection();
+
+                // Название компании
+                $propertyCompanyName = $propertyCollection->getItemByOrderPropertyId(37); // ID свойства Название компании
+                if ($propertyCompanyName) {
+                    $propertyCompanyName->setValue($orderProps['ORDER_PROP_37'] ?? '');
+                }
+
+                // ИНН
+                $propertyInn = $propertyCollection->getItemByOrderPropertyId(45); // ID свойства ИНН
+                if ($propertyInn) {
+                    $propertyInn->setValue($orderProps['ORDER_PROP_45'] ?? '');
+                }
+
+                // КПП
+                $propertyKpp = $propertyCollection->getItemByOrderPropertyId(46); // ID свойства КПП
+                if ($propertyKpp) {
+                    $propertyKpp->setValue($orderProps['ORDER_PROP_46'] ?? '');
+                }*/
+            }
+
+            // Обновляем DELIVERY_ID
+            if ($deliveryId) {
+                foreach ($this->order->getShipmentCollection() as  $shipment) {
+                    if (!$shipment->isSystem()) {
+                        $shipment->setField('DELIVERY_ID', $deliveryId);
+                        break; // Обновляем только одну несистемную отгрузку
+                    }
+                }
+                $this->arDeliveryServiceAll = \Bitrix\Sale\Delivery\Services\Manager::getRestrictedObjectsList($shipment);
+            }
+
+            // Подготовка результата
+            $this->prepareResultArray();
+            self::scaleImages($this->arResult['JS_DATA'], $this->arParams['SERVICES_IMAGES_SCALING']);
+
+        } else {
+            $error = Loc::getMessage('SESSID_ERROR');
+        }
+
+        $response = [
+            'order' => $this->arResult['JS_DATA'],
+            'locations' => $this->arResult['LOCATIONS'],
+            'error' => $error,
+        ];
+
+        if( $deliveryId || $locationId ){
+            $response['deliveryId'] = $deliveryId;
+        }
+
+        // Возвращаем ответ
+        $this->showAjaxAnswer($response);
+    }
 
 	/**
 	 * Returns true if basket quantity list is equal to basket "before refresh" state
@@ -4820,6 +4886,83 @@ class SaleOrderAjax extends \CBitrixComponent
 					Sale\EntityMarker::addMarker($this->order, $this->order, $r);
 					$this->order->setField('MARKED', 'Y');
 				}
+
+                // Установка данных из запроса
+                $orderProps = $_REQUEST;
+                $personTypeId = $orderProps['PERSON_TYPE'] ?? null;
+                $deliveryId = $orderProps['DELIVERY_ID'] ?? null;
+                $locationId = $orderProps['ORDER_PROP_21'] ?? null;
+
+                // Устанавливаем местоположение
+                if ($locationId) {
+                    $propertyCollection = $this->order->getPropertyCollection();
+                    $propertyLocation = $propertyCollection->getDeliveryLocation();
+
+                    if ($propertyLocation) {
+                        $propertyLocation->setValue($locationId);
+                    }
+                }
+
+                // Устанавливаем тип плательщика
+                if ($personTypeId) {
+                    $this->order->setPersonTypeId($personTypeId);
+                }
+
+                // Если PERSON_TYPE = 2 (юридическое лицо), обновляем свойства заказа
+                if ($personTypeId == 2) {
+                    /*$propertyCollection = $this->order->getPropertyCollection();
+
+                    // Название компании
+                    $propertyCompanyName = $propertyCollection->getItemByOrderPropertyId(37); // ID свойства Название компании
+                    if ($propertyCompanyName) {
+                        $propertyCompanyName->setValue($orderProps['ORDER_PROP_37'] ?? '');
+                    }
+
+                    // ИНН
+                    $propertyInn = $propertyCollection->getItemByOrderPropertyId(45); // ID свойства ИНН
+                    if ($propertyInn) {
+                        $propertyInn->setValue($orderProps['ORDER_PROP_45'] ?? '');
+                    }
+
+                    // КПП
+                    $propertyKpp = $propertyCollection->getItemByOrderPropertyId(46); // ID свойства КПП
+                    if ($propertyKpp) {
+                        $propertyKpp->setValue($orderProps['ORDER_PROP_46'] ?? '');
+                    }*/
+                }
+
+                // Обновляем DELIVERY_ID
+                if ($deliveryId) {
+                    foreach ($this->order->getShipmentCollection() as  $shipment) {
+                        if (!$shipment->isSystem()) {
+                            $calcResult = $shipment->calculateDelivery();
+                            $shipment->setField('DELIVERY_ID', $deliveryId);
+                            if ($calcResult->isSuccess()) {
+                                $calculatedPrice = $calcResult->getPrice();
+
+                                // Устанавливаем рассчитанную стоимость
+                                $shipment->setField('PRICE_DELIVERY', $calculatedPrice);
+
+
+                                echo "Calculated and set PRICE_DELIVERY for Delivery ID {$deliveryId}: {$calculatedPrice}<br>";
+                                die();
+                            }
+                            break; // Обновляем только одну несистемную отгрузку
+                        }
+                    }
+                    $this->arDeliveryServiceAll = \Bitrix\Sale\Delivery\Services\Manager::getRestrictedObjectsList($shipment);
+
+                }
+
+                die();
+
+
+
+
+
+
+
+
 
 				$this->saveOrder($saveToSession);
 
