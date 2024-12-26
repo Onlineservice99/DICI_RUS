@@ -178,20 +178,20 @@ if (array_key_exists('DEFAULT_DELIVERY', $arParams) && is_array($arParams["DEFAU
                     </div>
 					<div class="tab-content">
                     </div>
-                        <?/*<div class="d-none">// блок чтоб работали табы бутстрапа если убрать табы не будут работать правильно
-                            <ul class="nav">
-                                <?php foreach ($arResult['JS_DATA']['DELIVERY'] as $delivery):?>
+                    <div class=""><!--// блок чтоб работали табы бутстрапа если убрать табы не будут работать правильно-->
+                            <!--<ul class="nav">
+                                <?php /*foreach ($arResult['JS_DATA']['DELIVERY'] as $delivery):*/?>
                                     <div
-                                        class="tab-pane mb-40 fade"
-                                        href="#tab-delivery-<?=$delivery['ID']?>"
-                                        id="delivery-link<?=$delivery['ID']?>"
+                                        class="tab-pane mb-40 fade show"
+                                        href="#tab-delivery-<?php /*=$delivery['ID']*/?>"
+                                        id="delivery-link<?php /*=$delivery['ID']*/?>"
                                     />
-                                        <?=$delivery['OWN_NAME']?>
+                                        <?php /*=$delivery['OWN_NAME']*/?>
                                     </div>
-                                <?php endforeach;?>
-                            </ul>
-                        </div>?>
-                        <?php /*if (count($arResult['ORDER_PROP']['USER_PROFILES']) > 0 && 1 == 2):?>
+                                <?php /*endforeach;*/?>
+                            </ul>-->
+                        </div>
+                        <?php if (count($arResult['ORDER_PROP']['USER_PROFILES']) > 0 && 1 == 2):?>
                             <div class="tab-pane fade show active" id="tab-delivery-1">
                                 <h4 class="mb-20">Адрес доставки</h4>
                                 <div class="select mb-16">
@@ -255,18 +255,20 @@ if (array_key_exists('DEFAULT_DELIVERY', $arParams) && is_array($arParams["DEFAU
                                     </a>
                                 </div>
                             </div>
-                        <?php else:*/?>
+                        <?php else:?>
 
-                            <?php /*endif;*/?>
-                            <?php /*foreach ($arResult['JS_DATA']['DELIVERY'] as $delivery):
-                                echo "<pre>";
-                                    print_r($delivery);
-                                echo "</pre>";
-                                */?><!--
-                                <div class="tab-pane mb-40 fade show" id="tab-delivery-<?php /*=$delivery['ID']*/?>">
-                                    <?php /*=$delivery['DESCRIPTION']*/?>
-                                </div>
-                            --><?php /*endforeach;*/?>
+                            <?php endif;?>
+
+                        <?php /*foreach ($arResult['JS_DATA']['DELIVERY'] as $delivery):
+                            echo "<pre>";
+                                print_r($delivery);
+                            echo "</pre>";
+                            */?><!--
+                            <div class="tab-pane mb-40 fade show" id="tab-delivery-<?php /*=$delivery['ID']*/?>">
+                                <?php /*=$delivery['DESCRIPTION']*/?>
+                            </div>
+                        --><?php /*endforeach;*/?>
+                    </div>
                         <div class="border-top mb-40"></div>
                         <div>
                             <h4 class="mb-40 group_name"></h4>
@@ -447,25 +449,4 @@ $options['courierDeliveryIds'] = $arParams['COURIER_DELIVERY_IDS'];
 <script>
     var orderAjaxComponent = new Meven.Components.SaleOrderAjax('<?=$signedParams?>', <?=CUtil::PhpToJSObject($options)?>);
 
-    console.log(orderAjaxComponent);
-
-    // для совместимости
-    BX.Sale.OrderAjaxComponent = {
-        sendRequest: function() {
-			if($('#russianpost_result_address').val()) {
-				$('[name=ORDER_PROP_23]').parent().hide();
-				$('[name=ORDER_PROP_23]').parent().next().css('flex-grow', 1);
-			} else {
-				$('[name=ORDER_PROP_23]').parent().show();
-				$('[name=ORDER_PROP_23]').parent().next().css('flex-grow', false);
-			}
-			if($('#IPOLH_DPD_TERMINAL').val()) {
-				$('#IPOLH_DPD_TERMINAL_FIELD_CODE').val($('#IPOLH_DPD_TERMINAL').val());
-			}
-            $('[name=ORDER_PROP_23]').val($('#russianpost_result_address').val());
-            $('[name=ORDER_PROP_30]').val($('#russianpost_result_address').val());
-			$('[name=ORDER_PROP_35]').val($('#russianpost_result_zip').val());
-            //orderAjaxComponent.sendRequest();
-        }
-    };
 </script>

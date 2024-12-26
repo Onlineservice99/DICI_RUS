@@ -81,7 +81,8 @@ function convertUrlToCategory($sElementUrl, $iBlockID) {
     <meta name="viewport" content="width=device-width">
 
     <script src='<?=SITE_TEMPLATE_PATH;?>/assets/js/jquery.min.js'></script>
-    <?php $APPLICATION->ShowHead() ?>
+    <script src="https://enterprise.api-maps.yandex.ru/2.1/?load=package.full&mode=release&lang=ru-RU&wizard=bitrix&apikey=7244e2c4-7c06-49ab-babc-8d2aeba09830"></script>
+    <?php $APPLICATION->ShowHead() ?> 
     <title><?php $APPLICATION->ShowTitle() ?></title>
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">

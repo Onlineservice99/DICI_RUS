@@ -16,7 +16,6 @@ this.Meven = this.Meven || {};
         value: function initEventListener() {
           var instance = this;
           $(document).on('change', '.js-refresh-elem', function () {
-            console.log("checking_changes");
             var data = $('#soa-form').serializeArray();
             var obj = {};
 
@@ -37,7 +36,6 @@ this.Meven = this.Meven || {};
           $(document).on("change", ".terms_input", function(){
             let disabled=false;
             $(".terms_input").each(function(){
-              console.log($(this), $(this).prop("checked"));
               if(!$(this).prop("checked")){
                 disabled=true;
               }
@@ -85,7 +83,6 @@ this.Meven = this.Meven || {};
             for (var key in data1) {
               obj1[data1[key].name] = data1[key].value;
             }
-	console.log("first_request");
           this.sendRequest(obj1);
 
         }
@@ -99,16 +96,12 @@ this.Meven = this.Meven || {};
             SITE_ID: this.options.siteId,
             'soa-action': 'saveOrderAjax'
           };
-            console.log(data)
           obj = Object.assign(data, obj);
           var test = new FormData();
 
           for (var key in obj) {
             test.append(key, obj[key]);
           }
-          /*for(let [name, value] of test) {
-            console.log(`${name} = ${value}`); // key1=value1, потом key2=value2
-          }*/
           $.ajax({
             url: '/bitrix/components/bitrix/sale.order.ajax/ajax.php',
             data: test,
@@ -159,10 +152,8 @@ this.Meven = this.Meven || {};
             obj.order = data;
             result = obj;
           }
-		console.log("request");
-		console.log(result);
           $.ajax({
-            url: '/bitrix/components/bitrix/sale.order.ajax/ajax.php',
+            url: '/local/components/bitrix/sale.order.ajax/ajax.php',
             data: result,
             method: "POST",
             success: function success(e) {
@@ -173,7 +164,6 @@ this.Meven = this.Meven || {};
       }, {
         key: "parseResponse",
         value: function parseResponse(json) {
-            console.log(json)
           this.createDeliveries(json.order.DELIVERY,json.deliveryId);
           this.createPayments(json.order.PAY_SYSTEM);
           this.createItems(json.order.GRID.ROWS);
@@ -190,35 +180,36 @@ this.Meven = this.Meven || {};
           $.each(blocks, function(i,v){
               let block = $(v);
               var deliveryIds = block.attr('data-delivery').split(",");
-              console.log(deliveryIds);
               var html = '';
-              
+
               for (var key in deliveries) {
-                if(deliveryIds.indexOf(deliveries[key].ID) != -1){
-                  var ch = '';
-                    console.log(deliveries[key].ID,'$setted_value',$setted_value)
-                    if($setted_value == null){
-                        if (deliveries[key].CHECKED === 'Y') {
-                            ch = 'checked="checked"';
-                            activeBlock=block.attr("id");
-                        }
-                    }
-                    else{
-                        if (deliveries[key].ID === $setted_value) {
-                            ch = 'checked="checked"';
-                            activeBlock=block.attr("id");
-                        }
-                    }
-                  
-                  html += '<div class="form-block">' + '<label class="form-block__checkbox form-block__checkbox--radio">' + '<input class="js-refresh-elem" type="radio" name="DELIVERY_ID" value="' + deliveries[key].ID + '" ' + ch + '><span' + ' class="p-md">' + deliveries[key].OWN_NAME + '</span>' + '</label>';
+                  if (deliveryIds.indexOf(deliveries[key].ID) != -1) {
+                      var ch = '';
+                      if ($setted_value == null) {
+                          if (deliveries[key].CHECKED === 'Y') {
+                              ch = 'checked="checked"';
+                              activeBlock = block.attr("id");
+                          }
+                      } else {
+                          if (deliveries[key].ID === $setted_value) {
+                              ch = 'checked="checked"';
+                              activeBlock = block.attr("id");
+                          }
+                      }
 
-                  if (deliveries[key].CHECKED === 'Y' && deliveries[key].DESCRIPTION) {
-                      html += '<div class="delivery-description">' + deliveries[key].DESCRIPTION + deliveries[key].CALCULATE_DESCRIPTION + '</div>';
+                      html += '<div class="form-block">' +
+                          '<label class="form-block__checkbox form-block__checkbox--radio">' +
+                          '<input class="js-refresh-elem" type="radio" name="DELIVERY_ID" value="' + deliveries[key].ID + '" ' + ch + '><span class="p-md">' + deliveries[key].OWN_NAME + '</span>' +
+                          '</label>';
+
+                      if (deliveries[key].CHECKED === 'Y' && deliveries[key].DESCRIPTION) {
+                          html += '<div class="delivery-description">' + deliveries[key].DESCRIPTION + deliveries[key].CALCULATE_DESCRIPTION + '</div>';
+                      }
+
+                      html += '</div>';
                   }
-
-                  html += '</div>';
-                }
               }
+
               if(html=='' && !stopChecking){
                 showTabs=false;
                 stopChecking=true;
@@ -297,7 +288,6 @@ this.Meven = this.Meven || {};
           }
           //props.properties.sort(compareNumeric);
           let blocks = $('[data-properies]');
-          console.log(props);
           $.each(blocks, function(i,v){
               let block = $(v);
 
@@ -383,7 +373,6 @@ this.Meven = this.Meven || {};
                 type: "ADDRESS",
                 constraints: {locations: {kladr_id:$(".kladr_id").val()}},
                 onSelect: function(suggestion) {
-                    console.log(suggestion);
                     $("#soa-property-35").val(suggestion.data.postal_code);
                     $("#soa-property-23").val(suggestion.value);
                     /*var data = $('#soa-form').serializeArray();
@@ -402,7 +391,6 @@ this.Meven = this.Meven || {};
                   type: "PARTY",
 
                   onSelect: function(suggestion) {
-                      console.log(suggestion);
                       $("input[data-code='INN']").val(suggestion.data.inn);
                       $("input[data-code='KPP']").val(suggestion.data.kpp);
                       $("input[data-code='UR_ADRESS']").val(suggestion.data.address.unrestricted_value);
@@ -435,7 +423,6 @@ this.Meven = this.Meven || {};
       },{
         key: "getPickPoint",
         value:function getPickPoint(string){
-          console.log($("input[name='DELIVERY_ID']:checked"));
           $("input[name='DELIVERY_ID']:checked").parents(".form-block").find("button").click();
         }
 

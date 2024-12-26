@@ -4831,6 +4831,11 @@ class SaleOrderAjax extends \CBitrixComponent
 
         if( $deliveryId || $locationId ){
             $response['deliveryId'] = $deliveryId;
+
+            if( $deliveryId ){
+                unset($this->arResult['JS_DATA']['DELIVERY'][40]);
+                $this->arResult['JS_DATA']['DELIVERY'][$deliveryId]['CHECKED'] = "Y";
+            }
         }
 
         // Возвращаем ответ

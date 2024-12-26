@@ -1,5 +1,5 @@
 module.exports = {
-	input: 'src/os_script.js',
-	output: 'dist/os_script.bundle.js',
+	input: 'src/script.js',
+	output: 'dist/script.bundle.js',
 	namespace: 'Meven.Components'
 };
