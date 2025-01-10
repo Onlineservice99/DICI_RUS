@@ -47,3 +47,7 @@
     cursor: pointer;
     background-color: #fc152e;
 }
+.basket--order .basket__main{
+    position: relative;
+    z-index: 10;
+}

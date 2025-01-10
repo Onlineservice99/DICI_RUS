@@ -17,7 +17,7 @@ if ($arResult['LOCATION']['NAME'] != '') {
 <div class="form-block">
     <input class="form-block__input" id="location" name="" value="<?=$city?>">
     <input type="hidden" class="js-refresh-elem location_hidden_field" value="<?=$arResult['LOCATION']['CODE']?>"
-           name="ORDER_PROP_<?=$arParams['ID_PROP']?>">
+           name="LOCATION">
     <div id="js-city-ul" class="d-none" style="position: absolute; top: 83px; background-color: #fff; width: 100%;z-index: 3;">
         <ul></ul>
     </div>

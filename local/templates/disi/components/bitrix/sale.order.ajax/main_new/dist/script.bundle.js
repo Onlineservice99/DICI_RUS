@@ -171,60 +171,29 @@ this.Meven = this.Meven || {};
           this.updateRightBlock(json.order);
         }
       }, {
-        key: "createDeliveries",
-        value: function createDeliveries(deliveries,$setted_value) {
-          var blocks = $('[data-delivery]');
-          let showTabs=true;
-          let stopChecking=false;
-          var activeBlock=false;
-          $.each(blocks, function(i,v){
-              let block = $(v);
-              var deliveryIds = block.attr('data-delivery').split(",");
+          key: "createDeliveries",
+          value: function createDeliveries(deliveries) {
+              var block = $('[data-delivery]');
               var html = '';
 
               for (var key in deliveries) {
-                  if (deliveryIds.indexOf(deliveries[key].ID) != -1) {
-                      var ch = '';
-                      if ($setted_value == null) {
-                          if (deliveries[key].CHECKED === 'Y') {
-                              ch = 'checked="checked"';
-                              activeBlock = block.attr("id");
-                          }
-                      } else {
-                          if (deliveries[key].ID === $setted_value) {
-                              ch = 'checked="checked"';
-                              activeBlock = block.attr("id");
-                          }
-                      }
+                  var ch = '';
 
-                      html += '<div class="form-block">' +
-                          '<label class="form-block__checkbox form-block__checkbox--radio">' +
-                          '<input class="js-refresh-elem" type="radio" name="DELIVERY_ID" value="' + deliveries[key].ID + '" ' + ch + '><span class="p-md">' + deliveries[key].OWN_NAME + '</span>' +
-                          '</label>';
-
-                      if (deliveries[key].CHECKED === 'Y' && deliveries[key].DESCRIPTION) {
-                          html += '<div class="delivery-description">' + deliveries[key].DESCRIPTION + deliveries[key].CALCULATE_DESCRIPTION + '</div>';
-                      }
-
-                      html += '</div>';
+                  if (deliveries[key].CHECKED === 'Y') {
+                      ch = 'checked="checked"';
                   }
+
+                  html += '<div class="form-block">' + '<label class="form-block__checkbox form-block__checkbox--radio">' + '<input class="js-refresh-elem" type="radio" name="DELIVERY_ID" value="' + deliveries[key].ID + '" ' + ch + '><span' + ' class="p-md">' + deliveries[key].OWN_NAME + '</span>' + '</label>';
+
+                  if (deliveries[key].CHECKED === 'Y' && deliveries[key].DESCRIPTION) {
+                      html += '<div class="delivery-description">' + deliveries[key].DESCRIPTION + '</div>';
+                  }
+
+                  html += '</div>';
               }
 
-              if(html=='' && !stopChecking){
-                showTabs=false;
-                stopChecking=true;
-              }
               block.html(html);
-            });
-
-          $('a[href="#'+activeBlock+'"]').click();
-          if(showTabs){
-            $(".delivery_block").find(".delivery_tabs").addClass("d-lg-flex").show();
           }
-          else{
-            $(".delivery_block").find(".delivery_tabs").removeClass("d-lg-flex").hide();
-          }
-        }
       }, {
         key: "createPayments",
         value: function createPayments(payments) {
