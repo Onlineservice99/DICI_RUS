@@ -13,7 +13,13 @@ $asset = \Bitrix\Main\Page\Asset::getInstance(); ?>
 <?
 $asset->addJs($templateFolder . '/dist/script.bundle.js');
 ?>
-
+<style>
+    body > main > section > article > div.section__overlay.mb-32.mb-lg-80.pt-lg-56 > div > div{
+        @media(min-width: 1200px){
+            display: flex;
+        }
+    }
+</style>
 
 <?
 
@@ -172,12 +178,12 @@ if (array_key_exists('DEFAULT_DELIVERY', $arParams) && is_array($arParams["DEFAU
                                 <li class="nav-item">
                                     <a class="nav-link deliveryTab" href="#deliverytab-2" data-os_tab="2" >Самовывоз</a>
                                 </li>
-                            </ul> 
+                            </ul>
                         </div>
 
                     </div>
                     <div class="form__block form__block--delivery" id="deliveryItems" data-delivery></div>
-                    <?php if (count($arResult['ORDER_PROP']['USER_PROFILES']) > 0 && 1 == 2): ?>
+                    <?php if ( !is_null($arResult['ORDER_PROP']['USER_PROFILES']) && count($arResult['ORDER_PROP']['USER_PROFILES']) > 0 && 1 == 2): ?>
                         <div class="tab-pane fade show active" id="tab-delivery-1">
                             <h4 class="mb-20">Адрес доставки</h4>
                             <div class="select mb-16">
