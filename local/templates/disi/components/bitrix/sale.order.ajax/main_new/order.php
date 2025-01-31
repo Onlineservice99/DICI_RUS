@@ -172,7 +172,7 @@ if (array_key_exists('DEFAULT_DELIVERY', $arParams) && is_array($arParams["DEFAU
                                 <li class="nav-item">
                                     <a class="nav-link deliveryTab" href="#deliverytab-2" data-os_tab="2" >Самовывоз</a>
                                 </li>
-                            </ul>
+                            </ul> 
                         </div>
 
                     </div>

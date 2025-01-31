@@ -100,7 +100,11 @@ for ($i = 2; $i < count($aSectionsCodesList) - 1; $i++) {
             <div class="product-block__head mb-24">
                 <div class="col-xl-auto pb-12 px-12">
                     <div class="p-md text-gray">Бренд</div>
-                    <?= (!empty(current($arResult['DISPLAY_PROPERTIES']['BRAND']['LINK_ELEMENT_VALUE'])['NAME'])) ? current($arResult['DISPLAY_PROPERTIES']['BRAND']['LINK_ELEMENT_VALUE'])['NAME'] : $arResult['PROPERTIES']['CML2_MANUFACTURER']['VALUE'] ?>
+                    <?= ( !is_null($arResult['DISPLAY_PROPERTIES']['BRAND']['LINK_ELEMENT_VALUE']) && !empty(current($arResult['DISPLAY_PROPERTIES']['BRAND']['LINK_ELEMENT_VALUE'])['NAME']) &&
+                        !is_null(current($arResult['DISPLAY_PROPERTIES']['BRAND']['LINK_ELEMENT_VALUE'])['NAME']))
+                        ? current($arResult['DISPLAY_PROPERTIES']['BRAND']['LINK_ELEMENT_VALUE'])['NAME']
+                        : $arResult['PROPERTIES']['CML2_MANUFACTURER']['VALUE']
+                    ?>
                 </div>
                 <div class="col-xl-auto pb-12 px-12">
                     <div class="p-md text-gray">Страна изготовителя</div>

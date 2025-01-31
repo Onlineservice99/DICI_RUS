@@ -1,0 +1,12 @@
+{
+    "require": {
+        "Meven/bitrix-migrations": "^2.7",
+        "guzzlehttp/guzzle": "^7.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Meven\\": "src/",
+            "Russvet\\": "russvet/"
+        }
+    }
+}

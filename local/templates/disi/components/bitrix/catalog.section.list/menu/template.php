@@ -24,7 +24,7 @@
                                 <?php $catalogCardImg = CFile::ResizeImageGet($section['PICTURE']['ID'], Array("width" => 200, "height" => 200), BX_RESIZE_IMAGE_PROPORTIONAL ) ?>
                                 <img class="catalog-card__ic" loading="lazy" src="<?=(!empty($catalogCardImg['src'])) ? $catalogCardImg['src'] : SITE_TEMPLATE_PATH.'/assets/img/no_photo.png'?>" alt="<?=$section["NAME"]?>">
                                 <div class="pl-16">
-                                    <?if (count($section['LVL2'])):?>
+                                    <?if ( !is_null($section['LVL2']) && count($section['LVL2'])):?>
                                         <a class="catalog-card__title link h4" href="#catalog-lvl<?=$section['ID']?>" data-fancybox data-touch="false" data-base-class="fancybox-catalog">
                                             <?=$section['NAME']?></span>
                                         </a>
@@ -35,13 +35,18 @@
                                     <?endif;?>
                                     <ul class="catalog-card__list">
                                         <?php
-                                        $valuesCount = count($section['LVL2']); // Количество значений свойства
+                                        $valuesCount = !is_null($section['LVL2'])  ? count($section['LVL2']) : 0; // Количество значений свойства
                                         $valuesVisible = $arParams["VISIBLE_SUBSECTIONS"]; // Количество видимых значений свойства
-                                        foreach (array_slice($section['LVL2'], 0, $valuesVisible) as $s):?>
-                                            <li>
-                                                <a class="link" href="<?=$s['SECTION_PAGE_URL']?>"><?=$s['NAME']?></span></a>
-                                            </li>
-                                        <?php endforeach;?>
+                                        if( !is_null($section['LVL2']) ): ?>
+
+                                            <?
+                                            foreach (array_slice($section['LVL2'], 0, $valuesVisible) as $s):?>
+                                                <li>
+                                                    <a class="link" href="<?=$s['SECTION_PAGE_URL']?>"><?=$s['NAME']?></span></a>
+                                                </li>
+                                            <?php endforeach;
+                                        endif;
+                                        ?>
                                     </ul>
                                     <?php if($valuesCount > $valuesVisible):?>
                                         <div class="catalog-card__hide-block">
@@ -141,27 +146,31 @@
                                                                                                 <img class="catalog-card__ic" loading="lazy" src="<?=(!empty($catalogCardImgLvl3['src'])) ? $catalogCardImgLvl3['src'] : SITE_TEMPLATE_PATH.'/assets/img/no_photo.png'?>" alt="<?=$subSection3["NAME"]?>">
                                                                                                 <div class="pl-16">
                                                                                                     <a class="catalog-card__title link h4" href="<?=$subSection3["SECTION_PAGE_URL"]?>"
-                                                                                                        <?php/* if (!empty($arResult['SECTIONS'][$subSection3["ID"]]['LVL4'])):?>
+                                                                                                        <?php /* if (!empty($arResult['SECTIONS'][$subSection3["ID"]]['LVL4'])):?>
                                                                                                             href="#catalog-lvl<?=$subSection3["ID"]?>"
                                                                                                             data-fancybox
                                                                                                             data-touch="false"
                                                                                                             data-base-class="fancybox-catalog"
                                                                                                         <?php else:?>
                                                                                                             href="<?=$subSection3["SECTION_PAGE_URL"]?>"
-                                                                                                        <?php endif; */?>
+                                                                                                        <?php endif; */ ?>
                                                                                                     >
                                                                                                         <?=$subSection3['NAME']?></span>
                                                                                                     </a>
                                                                                                     <ul class="catalog-card__list">
                                                                                                         <?php
-                                                                                                        $valuesCount = count($arResult['SECTIONS'][$subSection3["ID"]]['LVL4']); // Количество значений свойства
+                                                                                                        $valuesCount = ( !is_null($arResult['SECTIONS'][$subSection3["ID"]]['LVL4']) ) ? count($arResult['SECTIONS'][$subSection3["ID"]]['LVL4']) : 0; // Количество значений свойства
                                                                                                         $valuesVisible = $arParams["VISIBLE_SUBSECTIONS"]; // Количество видимых значений свойства
+
+                                                                                                        if( !is_null($arResult['SECTIONS'][$subSection3["ID"]]['LVL4']) ):
                                                                                                         foreach (array_slice($arResult['SECTIONS'][$subSection3["ID"]]['LVL4'], 0, $valuesVisible) as $key4 => $s4):
                                                                                                             ?>
                                                                                                             <li>
                                                                                                                 <a class="link" href="<?=$s4['SECTION_PAGE_URL']?>"><?=$s4['NAME']?></span></a>
                                                                                                             </li>
-                                                                                                        <?php endforeach;?>
+                                                                                                        <?php endforeach;
+                                                                                                        endif;
+                                                                                                        ?>
                                                                                                     </ul>
                                                                                                     <?php if($valuesCount > $valuesVisible):?>
                                                                                                         <div class="catalog-card__hide-block">
@@ -204,14 +213,18 @@
                                                             </div>
                                                             <ul class="catalog-card__list">
                                                                 <?php
-                                                                $valuesCount = count($arResult['SECTIONS'][$subSection["ID"]]['LVL3']); // Количество значений свойства
+                                                                $valuesCount = ( !is_null($arResult['SECTIONS'][$subSection["ID"]]['LVL3']) ) ? count($arResult['SECTIONS'][$subSection["ID"]]['LVL3']) : 0; // Количество значений свойства
                                                                 $valuesVisible = $arParams["VISIBLE_SUBSECTIONS"]; // Количество видимых значений свойства
+
+                                                                if( !is_null($arResult['SECTIONS'][$subSection["ID"]]['LVL3']) ):
                                                                 foreach (array_slice($arResult['SECTIONS'][$subSection["ID"]]['LVL3'], 0, $valuesVisible) as $key3 => $s):
                                                                     ?>
                                                                     <li>
                                                                         <a class="link" href="<?=$s['SECTION_PAGE_URL']?>"><?=$s['NAME']?></span></a>
                                                                     </li>
-                                                                <?php endforeach;?>
+                                                                <?php endforeach;
+                                                                endif;
+                                                                ?>
                                                             </ul>
                                                             <?php if($valuesCount > $valuesVisible):?>
                                                                 <div class="catalog-card__hide-block">
