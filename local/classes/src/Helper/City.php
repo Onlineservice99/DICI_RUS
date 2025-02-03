@@ -12,7 +12,7 @@ class City
     public function __construct()
     {
         $geoData = $this->getFromIp();
-        $city = $geoData->cityName;
+        $city = ( !is_null($geoData) ) ? $geoData->cityName : "Череповец";
         $this->city = $city;
     }
 
@@ -34,6 +34,6 @@ class City
     {
         $ipAddress = Manager::getRealIp();
         $result = Manager::getDataResult($ipAddress, "ru");
-        return $result->getGeoData();
+        return ( !is_null($result) ) ? $result->getGeoData() : null;
     }
 }
